@@ -5,3 +5,4 @@ export { Home } from './Home/Home';
 export { About } from './About/About';
 export { Counter } from './Counter/Counter';
 export { Stars }from './Stars/Stars';
+export { TodoList } from './TodoList/TodoList'
