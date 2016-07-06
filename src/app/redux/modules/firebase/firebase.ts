@@ -1,6 +1,8 @@
 const firebase = require('firebase')
 import * as workoutsModel from '../workouts/workouts.model'
 
+export const CONFIG_REPLACE: string = 'CONFIG_REPLACE'
+
 // Initialize Firebase
 const config = {
   apiKey: 'AIzaSyBWPSHXhXpV7_Rg99GsIvCwjzCFo_Xkizg',

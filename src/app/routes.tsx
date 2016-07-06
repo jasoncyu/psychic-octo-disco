@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IndexRoute, Route } from 'react-router';
-import { App, Home, About, Counter, Stars, TodoList } from './containers';
+import { App, Home, About, Counter, Stars, TodoList, Workouts } from './containers';
 
 export default (
   <Route path="/" component={App}>
@@ -9,5 +9,6 @@ export default (
     <Route path="counter" component={Counter} />
     <Route path="stars" component={Stars} />
     <Route path="todos" component={TodoList} />
+    <Route path="workouts" component={Workouts} />
   </Route>
 );
