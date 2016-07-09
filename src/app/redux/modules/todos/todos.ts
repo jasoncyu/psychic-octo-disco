@@ -19,41 +19,40 @@ const initialState = {
 
 /* Type guards */
 function isAddTodoAction(action: model.ITodoAction): action is model.IAddTodoAction {
-    return action.type === ADD_TODO
+  return action.type === ADD_TODO
 }
 function isUpdateNewTodoAction(action: model.ITodoAction): action is model.IUpdateNewTodoAction {
   return action.type === UPDATE_NEW_TODO
 }
 
 export function todosReducer(state = initialState, action: model.ITodoAction) {
-    if (isAddTodoAction(action)) {
-        return Object.assign(
-            {},
-            state,
-            {
-                todoList: state.todoList.addTodo(action.text)
-            })
-    } else if (isUpdateNewTodoAction(action)) {
-        console.log(state.newTodo);
-        debugger
-        return Object.assign(
-            {},
-            state,
-            {
-                newTodo: state.newTodo.setText(action.text)
-            }
-        )
-    }
+  if (isAddTodoAction(action)) {
+    return Object.assign(
+      {},
+      state,
+      {
+        todoList: state.todoList.addTodo(action.text)
+      })
+  } else if (isUpdateNewTodoAction(action)) {
+    console.log(state.newTodo);
+    return Object.assign(
+      {},
+      state,
+      {
+        newTodo: state.newTodo.setText(action.text)
+      }
+    )
+  }
 
-    return state
+  return state
 }
 
 // Action creator
 export function addTodo(text: string): model.IAddTodoAction {
-    return {
-        type: ADD_TODO,
-        text
-    }
+  return {
+    type: ADD_TODO,
+    text
+  }
 }
 
 /**
@@ -61,8 +60,8 @@ export function addTodo(text: string): model.IAddTodoAction {
  */
 
 export function updateNewTodo(text: string): model.IUpdateNewTodoAction {
-    return {
-        type: UPDATE_NEW_TODO,
-        text
-    }
+  return {
+    type: UPDATE_NEW_TODO,
+    text
+  }
 }
