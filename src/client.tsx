@@ -34,4 +34,4 @@ ReactDOM.render(
   document.getElementById('app')
 );
 
-firebase.initialize()
+firebase.initialize(store)

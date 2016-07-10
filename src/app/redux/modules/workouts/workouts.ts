@@ -15,16 +15,25 @@ interface IState {
   workouts: model.IWorkout[];
   // The current lift being built up (before being saved).
   newLift: model.ILift;
+  // The currently selected lift to add data for.
+  currentLift: model.ILift;
+  lifts: model.ILifts;
 }
 
 const initialState: IState = {
   workouts: [],
   newLift: {
-    name: 'new lift default name'
-  }
+    name: '',
+  },
+  currentLift: {
+    name: ''
+  },
+  lifts: {},
 }
 
 const changeStateAction = actionUtils.actionCreator<model.ILift>(CHANGE_LIFT)
+const firebaseLiftsChanged = actionUtils.actionCreator<model.ILifts>(
+  fb.FIREBASE_LIFTS_CHANGED)
 /** Reducer */
 export function workoutsReducer(
   state = initialState,
@@ -40,6 +49,10 @@ export function workoutsReducer(
     }
     return Object.assign({}, state, {
       workouts: state.workouts.concat([workout])
+    })
+  } else if (actionUtils.isType(action, firebaseLiftsChanged)) {
+    return Object.assign({}, state, {
+      lifts: action.payload
     })
   }
 

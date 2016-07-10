@@ -128,7 +128,6 @@ module.exports = function (config) {
     conf.coverageReporter.reporters.push({ type: 'lcov', subdir: '.' });
   } else {
     conf.coverageReporter.reporters.push({ type: 'html', subdir: 'html' });
-    conf.browsers.push('Chrome');
   }
 
   config.set(conf);

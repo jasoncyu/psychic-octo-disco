@@ -31,17 +31,13 @@ class TodoList extends React.Component<IProps, {}> {
    */
   constructor() {
     super();
-    
+
     this.updateNewTodo = this.updateNewTodo.bind(this)
   }
 
   updateNewTodo(evt) {
     const text = evt.target.value
-    console.log('text');
-    
-    console.log(text);
-    
-    
+
     this.props.updateNewTodo(text)
   }
 
@@ -57,7 +53,7 @@ class TodoList extends React.Component<IProps, {}> {
             </div>
           )
         })}
-        <input 
+        <input
           type="text"
           placeholder="Add todo"
           value={this.props.newTodo}

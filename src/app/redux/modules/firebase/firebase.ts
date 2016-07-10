@@ -2,14 +2,17 @@ const firebase = require('firebase')
 import * as workouts from '../workouts'
 import * as actionUtils from '../actionUtils'
 
+// Constants
 export const CONFIG_REPLACE: string = 'CONFIG_REPLACE'
 export const START_LISTENING_TO_AUTH: string = 'START_LISTENING_TO_AUTH'
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST'
 export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS'
 export const LOG_IN_ERROR = 'LOG_IN_ERROR'
-export const FIREBASE_LIFT_CHANGED = 'FIREBASE_LIFT_CHANGED'
+export const FIREBASE_LIFTS_CHANGED = 'FIREBASE_LIFT_CHANGED'
 
-export const ADD_LIFT = 'ADD_LIFT'
+export const ADD_LIFT_REQUEST = 'ADD_LIFT_REQUEST'
+export const ADD_LIFT_SUCCESS = 'ADD_LIFT_SUCCESS'
+export const ADD_LIFT_ERROR = 'ADD_LIFT_ERROR'
 
 interface LogInRequest {
   email: string;
@@ -22,6 +25,10 @@ interface LogInSuccessAction {
 
 interface LogInErrorAction {
 
+}
+
+interface AddLiftRequest {
+  name: string;
 }
 
 // Initialize Firebase
@@ -37,8 +44,10 @@ const myUserID = 'zl2jhz5tUjSGWbDYmscYE7f6tJl2'
 const currentUserID = myUserID
 export const firebaseApp = app
 
-export function initialize() {
-  getCurrentUser().then(startListening)
+export function initialize(store: Redux.Store) {
+  getCurrentUser().then(() => {
+    store.dispatch(startListening())
+  })
 }
 
 export function startListening() {
@@ -49,7 +58,7 @@ export function startListening() {
     const liftsRef = db.ref('/lifts')
     liftsRef.on('value', (liftsSnapshot) => {
       dispatch({
-        type: FIREBASE_LIFT_CHANGED,
+        type: FIREBASE_LIFTS_CHANGED,
         payload: liftsSnapshot.val() || {},
       })
     })
@@ -63,7 +72,7 @@ export const getCurrentUser = () => {
       return
     }
 
-    firebase
+    return firebase
     .auth()
     .signInWithEmailAndPassword('yujason2@gmail.com', 'asdfasdf')
     .then(() => {
@@ -78,10 +87,14 @@ export const getCurrentUser = () => {
     })
   })
 }
-export const currentUserWorkoutsRef = firebase.database().ref(`/users/${currentUserID}/workouts`)
+
+export const currentUserWorkoutsRef = (
+  firebase.database().ref(`/users/${currentUserID}/workouts`))
 
 export const addLift = (liftObj: workouts.ILift) => {
-  return firebase.database().ref('/lifts').push(liftObj)
+  return ((dispatch, getState) => {
+    return firebase.database().ref('/lifts').push(liftObj)
+  })
 }
 
 export const addWorkout = (workoutObj: workouts.IWorkout) => {
@@ -89,16 +102,23 @@ export const addWorkout = (workoutObj: workouts.IWorkout) => {
   return firebase.database().ref('/workouts').push(workoutObj)
 }
 
+export const addLiftRequest = actionUtils.actionCreator<workouts.ILift>(
+  ADD_LIFT_REQUEST)
+export const addLiftSuccess = actionUtils.actionCreator<workouts.ILift>(
+  ADD_LIFT_SUCCESS)
+export const addLiftError = actionUtils.actionCreator<workouts.ILift>(
+  ADD_LIFT_ERROR)
+export const firebaseLiftChanged = actionUtils.actionCreator<workouts.ILift[]>(
+  FIREBASE_LIFTS_CHANGED)
+
 const initialState = {}
 
 function firebaseReducer(state = initialState, action) {
-  switch (action.type) {
-    case [ADD_LIFT]: {
+  if (actionUtils.isType(action, addLiftRequest)) {
       return addLift(action.payload)
-    }
-    default:
-      return state
   }
+
+  return state
 }
 
 export default firebase
