@@ -57,11 +57,10 @@ export function progressWeight(
   const roundToNearest = 5
 
   const beforeRounding = weight * (100 + percentUp) * 0.01
-  const roundedDown = (Math.floor(beforeRounding / roundToNearest) *
-                       roundToNearest)
+
+  const roundedDown = (beforeRounding - (beforeRounding % roundToNearest))
   if (roundedDown === weight) {
-    const roundedUp = (Math.ceil(beforeRounding / roundToNearest) *
-                       roundToNearest)
+    const roundedUp = (weight + roundToNearest - (weight % roundToNearest))
     return roundedUp
   }
 
