@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "enzyme": "registry:npm/enzyme#2.2.0+20160322031343",
-    "lodash": "registry:npm/lodash#4.0.0+20160701205107"
+    "lodash": "registry:npm/lodash#4.0.0+20160701205107",
+    "ramda": "registry:npm/ramda#0.21.0+20160531162943"
   }
 }

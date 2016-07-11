@@ -1,5 +1,6 @@
 const appConfig = require('../config/main');
 
+import * as firebase from './app/redux/modules/firebase/firebase'
 import * as e6p from 'es6-promise';
 (e6p as any).polyfill();
 import 'isomorphic-fetch';

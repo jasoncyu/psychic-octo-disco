@@ -5,6 +5,7 @@ import * as _ from 'lodash'
 const { connect } = require('react-redux')
 
 interface IProps {
+  workout: workout.IWorkout;
   newLift: workout.ILift;
   currentLift: workout.ILift;
   dispatch(state): any;
@@ -41,23 +42,8 @@ class Workouts extends React.Component<IProps, {}> {
   }
 
   render() {
-    console.log(this.props.newLift)
     return (
       <div>
-        <select value={this.props.currentLift}>
-          {Object.keys(this.props.lifts).map((id) => {
-            const lift = this.props.lifts[id]
-            return (
-              <option key={id} value={id}>{lift.name}</option>
-            )
-          })}
-        </select>
-        <input
-          type="text"
-          value={this.props.newLift.name}
-          onChange={this.handleChange}
-        />
-        {this.props.newLift.name}
       </div>
     )
   }

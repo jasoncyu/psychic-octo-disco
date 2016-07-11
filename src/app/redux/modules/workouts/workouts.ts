@@ -9,6 +9,7 @@ export const ADD_WORKOUT_SUCCESS: string = 'ADD_WORKOUT_SUCCESS'
 export const ADD_WORKOUT_ERROR: string = 'ADD_WORKOUT_ERROR'
 
 export const CHANGE_LIFT: string = 'CHANGE_LIFT'
+export const SET_CURRENT_WORKOUT: string = 'SET_CURRENT_WORKOUT'
 
 interface IState {
   // The workouts I've done.
@@ -18,6 +19,11 @@ interface IState {
   // The currently selected lift to add data for.
   currentLift: model.ILift;
   lifts: model.ILifts;
+
+  // The current workout being viewed.
+  workout: model.IWorkout;
+  // The set groups of the current workout
+  setGroupsOfWorkout: model.ISetGroups
 }
 
 const initialState: IState = {
@@ -29,11 +35,18 @@ const initialState: IState = {
     name: ''
   },
   lifts: {},
+  workout: {
+    startTS: new Date()
+  },
+  setGroupsOfWorkout: {}
 }
 
 const changeStateAction = actionUtils.actionCreator<model.ILift>(CHANGE_LIFT)
 const firebaseLiftsChanged = actionUtils.actionCreator<model.ILifts>(
   fb.FIREBASE_LIFTS_CHANGED)
+const setCurrentWorkout = actionUtils.actionCreator<model.IWorkout>(
+  SET_CURRENT_WORKOUT)
+
 /** Reducer */
 export function workoutsReducer(
   state = initialState,
@@ -52,7 +65,11 @@ export function workoutsReducer(
     })
   } else if (actionUtils.isType(action, firebaseLiftsChanged)) {
     return Object.assign({}, state, {
-      lifts: action.payload
+      allLifts: action.payload
+    })
+  } else if (actionUtils.isType(action, setCurrentWorkout)) {
+    return Object.assign({}, state, {
+
     })
   }
 

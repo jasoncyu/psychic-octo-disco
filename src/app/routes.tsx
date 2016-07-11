@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IndexRoute, Route } from 'react-router';
 import {
-  App, Home, About, Counter, Stars, TodoList, Workouts
+  App, Home, About, Counter, Stars, TodoList, Workouts, Workout
 } from './containers';
 
 export default (
@@ -11,6 +11,9 @@ export default (
     <Route path="counter" component={Counter} />
     <Route path="stars" component={Stars} />
     <Route path="todos" component={TodoList} />
-    <Route path="workouts" component={Workouts} />
+    <Route path="workouts" component={Workouts}
+    >
+      <Route path="workouts/:workoutID" component={Workout} />
+    </Route>
   </Route>
 );

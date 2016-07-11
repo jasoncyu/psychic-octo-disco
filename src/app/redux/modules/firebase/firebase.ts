@@ -1,6 +1,7 @@
 const firebase = require('firebase')
 import * as workouts from '../workouts'
 import * as actionUtils from '../actionUtils'
+import * as R from 'ramda'
 
 // Constants
 export const CONFIG_REPLACE: string = 'CONFIG_REPLACE'
@@ -50,6 +51,26 @@ export function initialize(store: Redux.Store) {
   })
 }
 
+export function getServerReduxInitialState() {
+  const db = firebase.database()
+
+  return getCurrentUser().then(() => {
+    const keys = ['lifts', 'workouts', 'setGroups']
+
+    const promises = []
+    keys.forEach((key) => {
+      const p = new Promise((resolve, reject) => {
+        db.ref(key).once('value', (snapshot) => {
+          return snapshot.val()
+        })
+      })
+      promises.push(p)
+    })
+
+    return Promise.all(promises)
+  })
+}
+
 export function startListening() {
   return (dispatch, getState) => {
     const db = firebase.database()
@@ -64,6 +85,7 @@ export function startListening() {
     })
   }
 }
+
 export const getCurrentUser = () => {
   return new Promise((resolve, reject) => {
     let currentUser = firebase.auth().currentUser
@@ -97,9 +119,23 @@ export const addLift = (liftObj: workouts.ILift) => {
   })
 }
 
+export const getWorkoutByID = (workoutID: string) => {
+  return new Promise((resolve, reject) => {
+    firebase.database()
+      .ref(`/workouts/${workoutID}`)
+      .on('value', (workoutsSnapshot) => {
+        resolve({workout: workoutsSnapshot.val()})
+      })
+  })
+}
+
 export const addWorkout = (workoutObj: workouts.IWorkout) => {
   console.log('workoutObj: ', workoutObj);
   return firebase.database().ref('/workouts').push(workoutObj)
+}
+
+export const addSetGroup = (setGroup: workouts.ISetGroup) => {
+  firebase.database().ref('/setGroups').push(setGroup)
 }
 
 export const addLiftRequest = actionUtils.actionCreator<workouts.ILift>(
@@ -115,7 +151,7 @@ const initialState = {}
 
 function firebaseReducer(state = initialState, action) {
   if (actionUtils.isType(action, addLiftRequest)) {
-      return addLift(action.payload)
+    return addLift(action.payload)
   }
 
   return state
