@@ -25,6 +25,7 @@ const path = require('path');
 const compression = require('compression');
 const Chalk = require('chalk');
 const favicon = require('serve-favicon');
+const horizon = require('@horizon/server');
 
 const app = Express();
 
@@ -91,7 +92,7 @@ app.get('*', (req, res) => {
     });
 });
 
-app.listen(appConfig.port, appConfig.host, err => {
+const server = app.listen(appConfig.port, appConfig.host, err => {
   if (err) {
     console.error(Chalk.bgRed(err));
   } else {
@@ -100,3 +101,12 @@ app.listen(appConfig.port, appConfig.host, err => {
     ));
   }
 });
+
+const options = {
+  project_name: 'myProject',
+  auth: { token_secret: 'my_super_secret_secret' },
+  permissions: false,
+  auto_create_collection: true,
+};
+
+const horizonServer = horizon(server, options);

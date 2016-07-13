@@ -1,8 +1,16 @@
 import * as React from 'react'
 import * as workout from '../../redux/modules/workouts'
 import * as _ from 'lodash'
+/* import * as Horizon from '@horizon/client';*/
+const Horizon = require('@horizon/client')
 
-const { connect } = require('react-redux')
+const { connect } = require('react-redux')
+const horizon = Horizon();
+horizon.onReady(function() {
+  console.log('app works')
+});
+
+horizon.connect();
 
 interface IProps {
   workout: workout.IWorkout;
