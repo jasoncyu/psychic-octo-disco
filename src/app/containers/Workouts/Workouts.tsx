@@ -7,7 +7,7 @@ const Horizon = require('@horizon/client')
 const { connect } = require('react-redux')
 const horizon = Horizon();
 horizon.onReady(function() {
-  console.log('app works')
+  console.log('horizon app works')
 });
 
 horizon.connect();

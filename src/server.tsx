@@ -55,7 +55,12 @@ app.use(favicon(path.resolve('favicon.ico')));
 
 app.use('/public', Express['static'](path.join(__dirname, '../build/public')));
 
+app.all('/horizon', (req, res, next) => {
+  console.log('req.url from /horizon route', req.url)
+})
+
 app.get('*', (req, res) => {
+  console.log('req.url in * route', req.url)
   const location = req.url;
   const memoryHistory = createMemoryHistory(req.originalUrl);
   const store = configureStore(memoryHistory);
@@ -104,7 +109,10 @@ const server = app.listen(appConfig.port, appConfig.host, err => {
 
 const options = {
   project_name: 'myProject',
-  auth: { token_secret: 'my_super_secret_secret' },
+  auth: {
+    token_secret: 'my_super_secret_secret',
+    allow_unauthenticated: true,
+  },
   permissions: false,
   auto_create_collection: true,
 };
