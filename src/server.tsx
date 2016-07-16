@@ -59,6 +59,13 @@ app.all('/horizon', (req, res, next) => {
   console.log('req.url from /horizon route', req.url)
 })
 
+function renderHTML(markup, store) {
+  const html = ReactDOMServer.renderToString(
+    <Html markup={markup} manifest={manifest} store={store} />
+  );
+
+  return `<!doctype html> ${html}`;
+}
 app.get('*', (req, res) => {
   console.log('req.url in * route', req.url)
   const location = req.url;
@@ -81,16 +88,9 @@ app.get('*', (req, res) => {
               <ReduxAsyncConnect {...renderProps} />
             </Provider>
           );
-          res.status(200).send(renderHTML(markup));
+          res.status(200).send(renderHTML(markup, store));
         });
 
-        function renderHTML(markup) {
-          const html = ReactDOMServer.renderToString(
-            <Html markup={markup} manifest={manifest} store={store} />
-          );
-
-          return `<!doctype html> ${html}`;
-        }
       } else {
         res.status(404).send('Not Found?');
       }
