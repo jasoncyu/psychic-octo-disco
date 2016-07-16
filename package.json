@@ -13,7 +13,8 @@
     "prestart": "npm run build",
     "start": "node build/server.js",
     "start:prod": "cross-env NODE_ENV=production npm start",
-    "test": "node_modules/.bin/karma start config/test/karma.conf.js"
+    "test": "node_modules/.bin/karma start config/test/karma.conf.js",
+    "ts-node": "ts-node"
   },
   "author": "Barbar Startup Factory <hey@barbar.com.tr>",
   "contributors": [
@@ -101,6 +102,7 @@
     "style-loader": "0.13.1",
     "stylelint": "6.2.2",
     "ts-loader": "0.8.2",
+    "ts-node": "0.9.3",
     "tslint": "3.9.0",
     "tslint-loader": "2.1.4",
     "typescript": "1.8.10",
@@ -123,6 +125,7 @@
     "lodash": "4.13.1",
     "ramda": "0.21.0",
     "react": "15.0.1",
+    "react-autosuggest": "3.8.0",
     "react-dom": "15.0.1",
     "react-helmet": "3.0.2",
     "react-redux": "4.4.5",
