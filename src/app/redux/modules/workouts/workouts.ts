@@ -18,6 +18,10 @@ export const GET_WORKOUT_REQUEST: string = 'GET_WORKOUT_REQUEST'
 export const GET_WORKOUT_SUCCESS: string = 'GET_WORKOUT_SUCCESS'
 export const GET_WORKOUT_ERROR: string = 'GET_WORKOUT_ERROR'
 
+export const GET_SET_GROUPS_REQUEST: string = 'GET_SET_GROUPS_REQUEST'
+export const GET_SET_GROUPS_SUCCESS: string = 'GET_SET_GROUPS_SUCCESS'
+export const GET_SET_GROUPS_ERROR: string = 'GET_SET_GROUPS_ERROR'
+
 export const ADD_SET_REQUEST: string = 'ADD_SET_REQUEST'
 export const ADD_SET_SUCCESS: string = 'ADD_SET_SUCCESS'
 export const ADD_SET_ERROR: string = 'ADD_SET_ERROR'
@@ -25,6 +29,10 @@ export const ADD_SET_ERROR: string = 'ADD_SET_ERROR'
 export const GET_WORKOUTS_REQUEST: string = 'GET_WORKOUTS_REQUEST'
 export const GET_WORKOUTS_SUCCESS: string = 'GET_WORKOUTS_SUCCESS'
 export const GET_WORKOUTS_ERROR: string = 'GET_WORKOUTS_ERROR'
+
+export const ADD_SET_GROUP_REQUEST: string = 'ADD_SET_GROUP_REQUEST'
+export const ADD_SET_GROUP_SUCCESS: string = 'ADD_SET_GROUP_SUCCESS'
+export const ADD_SET_GROUP_ERROR: string = 'ADD_SET_GROUP_ERROR'
 
 // Update the LIFT that a set group belongs to
 export const UPDATE_SET_GROUP_LIFT = 'UPDATE_SET_GROUP_LIFT'
@@ -46,7 +54,7 @@ interface IState {
   // The current workout being viewed.
   workout: model.IWorkout;
   // The set groups of the current workout
-  setGroups: model.ISetGroupSaved[];
+  setGroups: model.ISetGroup[];
 }
 
 const initialState: IState = {
@@ -59,7 +67,7 @@ const initialState: IState = {
 }
 
 interface SetAndLift {
-  setGroup: model.ISetGroupSaved;
+  setGroup: model.ISetGroup;
   lift: model.ILiftSaved;
 }
 
@@ -107,12 +115,50 @@ export function workoutsReducer(
     return Object.assign({}, state, {
       workout: action.payload.workout
     })
+  } else if (action.type === GET_SET_GROUPS_SUCCESS) {
+    return Object.assign({}, state, {
+      setGroups: action.payload.setGroups
+    })
   }
 
   return state
 }
 
 /** Async Action Creator */
+export function addSetGroup(setGroup) {
+  return dispatch => {
+    dispatch(addSetGroupRequest(setGroup))
+
+    hz('setGroups').store(setGroup)
+      .subscribe((id) => {
+        dispatch(addSetGroupSuccess())
+      }, (err) => {
+        dispatch(addSetGroupError(err))
+      })
+  }
+}
+
+export function getSetGroups(workoutID: string): Redux.Dispatch {
+  return dispatch => {
+    dispatch(getSetGroupsRequest(workoutID))
+
+    hz('setGroups').findAll({workoutID}).watch().subscribe(setGroups => {
+      dispatch({
+        type: GET_SET_GROUPS_SUCCESS,
+        payload: {
+          setGroups
+        }
+      })
+    }, (err) => {
+      console.error(err)
+      dispatch({
+        type: GET_SET_GROUPS_ERROR,
+        error: err
+      })
+    })
+  }
+}
+
 export function getWorkouts(): Redux.Dispatch {
   return dispatch => {
     dispatch({
@@ -162,6 +208,50 @@ export function addWorkout(workout: model.IWorkout): Redux.Dispatch {
 
 
 /** Action Creators */
+export function getSetGroupsRequest(
+  workoutID: string): model.IWorkoutsAction {
+  return {
+    type: GET_SET_GROUPS_REQUEST,
+    payload: {
+      workoutID
+    }
+  }
+}
+
+export function getSetGroupsSuccess(): model.IWorkoutsAction {
+  return {
+    type: GET_SET_GROUPS_SUCCESS
+  }
+}
+
+export function getSetGroupsError(): model.IWorkoutsAction {
+  return {
+    type: GET_SET_GROUPS_ERROR
+  }
+}
+export function addSetGroupRequest(
+  setGroup: model.ISetGroup): model.IWorkoutsAction {
+  return {
+    type: ADD_SET_GROUP_REQUEST,
+    payload: {
+      setGroup
+    }
+  }
+}
+
+export function addSetGroupSuccess(): model.IWorkoutsAction {
+  return {
+    type: ADD_SET_GROUP_SUCCESS
+  }
+}
+
+export function addSetGroupError(error): model.IWorkoutsAction {
+  return {
+    type: ADD_SET_GROUP_ERROR,
+    error
+  }
+}
+
 export function getWorkoutRequest(id: string): model.IGetWorkoutAction {
   return {
     type: GET_WORKOUT_REQUEST,

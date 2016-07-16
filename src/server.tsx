@@ -115,6 +115,7 @@ const options = {
   },
   permissions: false,
   auto_create_collection: true,
+  auto_create_index: true,
 };
 
 const horizonServer = horizon(server, options);

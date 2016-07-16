@@ -13,7 +13,7 @@ interface IProps {
   addLift: () => void;
 
   // The lifts already present on this workout
-  setGroups: workout.ISetGroups;
+  setGroups: workout.ISetGroup[];
 
   // All lifts that our app knows about.
   allLifts: workout.ILifts;
@@ -25,42 +25,44 @@ interface IProps {
 
 @connect(
   (state, ownProps) => {
-    return {}
+    return {
+      setGroups: state.workouts.setGroups
+    }
   }
 )
 
 class Workout extends React.Component<IProps, {}> {
-  componentDidMount() {
-    this.props.dispatch(workout.getWorkout(this.props.params.id))
+  constructor() {
+    super()
+    this.addSetGroup = this.addSetGroup.bind(this)
+    this.getSetGroupsJSX = this.getSetGroupsJSX.bind(this)
   }
 
-  getSetGroupsJSX() {
-    // R.pipe(
-    //   R.keys,
-    //   (setGroupID: string) => {
-    //     return (
-    //       <div>
-    //         <select value={lift}>
-    //           {Object.keys(this.props.allLifts).map((id) => {
-    //              const lift = this.props.allLifts[id]
-    //              return (
-    //                <option key={id} value={id}>{lift.name}</option>
-    //              )
-    //            })}
-    //         </select>
-    //       </div>
-    //     )
-    //   }
-    // )
-    //
-    return (<div>asdf</div>)
+  componentDidMount() {
+    this.props.dispatch(workout.getWorkout(this.props.params.id))
+    this.props.dispatch(workout.getSetGroups(this.props.params.id))
   }
 
   addSetGroup() {
     const setGroup: workout.ISetGroup = {
-      workoutID: this.props.workoutID,
+      workoutID: this.props.params.id,
       percentUp: 10,
     }
+    this.props.dispatch(workout.addSetGroup(setGroup))
+  }
+
+  getSetGroupsJSX() {
+    if (this.props.setGroups === null) {
+      return
+    }
+
+    return this.props.setGroups.map(setGroup => {
+      return (
+        <div>
+          {setGroup.id}
+        </div>
+      )
+    })
   }
 
   render() {
@@ -71,6 +73,7 @@ class Workout extends React.Component<IProps, {}> {
         >
           Add set group
         </button>
+        {this.getSetGroupsJSX()}
       </div>
     )
   }

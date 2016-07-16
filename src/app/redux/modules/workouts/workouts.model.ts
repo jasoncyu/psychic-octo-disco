@@ -54,6 +54,20 @@ const ProgressionSchemeEnum = {
 // A group of sets. 'group' meaning that these sets are performed together.
 // These are usually the same Lift.
 export interface ISetGroup {
+  id?: string;
+
+  // The ID's of the sets that belong to this set group.
+  setIDs?: string[];
+
+  // The ID of the workout this set group belongs to.
+  workoutID?: string;
+
+  // The lift that the sets in this group are performing.
+  liftID?: string;
+
+  // The ID of the planned workout this set group belongs to. That means this
+  // set group hasn't been performed, but the user plans to perform it.
+  plannedWorkoutID?: string;
   // How we generate future set groups based on this one.
   progressionScheme?: ProgressionScheme
 
@@ -63,23 +77,7 @@ export interface ISetGroup {
 
   // The number showing the order that these set groups were performed.
   // So if I do a set group of bench press first, that is set group 1.
-  number: number;
-}
-
-export interface ISetGroupSaved extends ISetGroup {
-  id: string;
-
-  // The ID's of the sets that belong to this set group.
-  setIDs: string[];
-  // The ID of the workout this set group belongs to.
-  workoutID: string;
-
-  // The lift that the sets in this group are performing.
-  liftID: string;
-
-  // The ID of the planned workout this set group belongs to. That means this
-  // set group hasn't been performed, but the user plans to perform it.
-  plannedWorkoutID?: string;
+  number?: number;
 }
 
 export interface ISetGroups {

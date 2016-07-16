@@ -50,7 +50,7 @@ describe('Workout with DB', () => {
       })
       .map(lift => {
         console.log('lift: ', lift)
-        // const savedSetGroup: model.ISetGroupSaved = Object.assign(
+        // const savedSetGroup: model.ISetGroup = Object.assign(
         //   {},
         //   setGroup,
         //   {
