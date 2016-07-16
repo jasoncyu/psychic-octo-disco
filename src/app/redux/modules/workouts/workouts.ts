@@ -14,6 +14,10 @@ export const ADD_WORKOUT_ERROR: string = 'ADD_WORKOUT_ERROR'
 export const CHANGE_LIFT: string = 'CHANGE_LIFT'
 export const SET_CURRENT_WORKOUT: string = 'SET_CURRENT_WORKOUT'
 
+export const GET_WORKOUT_REQUEST: string = 'GET_WORKOUT_REQUEST'
+export const GET_WORKOUT_SUCCESS: string = 'GET_WORKOUT_SUCCESS'
+export const GET_WORKOUT_ERROR: string = 'GET_WORKOUT_ERROR'
+
 export const ADD_SET_REQUEST: string = 'ADD_SET_REQUEST'
 export const ADD_SET_SUCCESS: string = 'ADD_SET_SUCCESS'
 export const ADD_SET_ERROR: string = 'ADD_SET_ERROR'
@@ -50,9 +54,7 @@ const initialState: IState = {
   newLift: null,
   currentLift: null,
   lifts: {},
-  workout: {
-    startTS: Date.now()
-  },
+  workout: null,
   setGroups: [],
 }
 
@@ -101,6 +103,10 @@ export function workoutsReducer(
     return Object.assign({}, state, {
       workouts: action.payload.workouts
     })
+  } else if (action.type === GET_WORKOUT_SUCCESS) {
+    return Object.assign({}, state, {
+      workout: action.payload.workout
+    })
   }
 
   return state
@@ -113,7 +119,7 @@ export function getWorkouts(): Redux.Dispatch {
       type: GET_WORKOUTS_REQUEST
     })
 
-    hz('workouts').fetch().subscribe(workouts => {
+    hz('workouts').watch().subscribe(workouts => {
       dispatch({
         type: GET_WORKOUTS_SUCCESS,
         payload: {
@@ -125,6 +131,18 @@ export function getWorkouts(): Redux.Dispatch {
       dispatch({
         type: GET_WORKOUTS_ERROR
       })
+    })
+  }
+}
+
+export function getWorkout(id: string) {
+  return dispatch => {
+    dispatch(getWorkoutRequest(id))
+
+    hz('workouts').find(id).watch().subscribe(workout => {
+      dispatch(getWorkoutSuccess(workout))
+    }, (err) => {
+      dispatch(getLiftsError(err))
     })
   }
 }
@@ -144,6 +162,31 @@ export function addWorkout(workout: model.IWorkout): Redux.Dispatch {
 
 
 /** Action Creators */
+export function getWorkoutRequest(id: string): model.IGetWorkoutAction {
+  return {
+    type: GET_WORKOUT_REQUEST,
+    payload: {
+      id
+    }
+  }
+}
+
+export function getWorkoutSuccess(workout: model.IWorkout): model.IWorkoutsAction {
+  return {
+    type: GET_WORKOUT_SUCCESS,
+    payload: {
+      workout
+    }
+  }
+}
+
+export function getWorkoutError(err: any): model.IWorkoutsAction {
+  return {
+    type: GET_WORKOUT_ERROR,
+    error: err
+  }
+}
+
 export function addWorkoutRequest(): model.IWorkoutsAction {
   return {
     type: ADD_WORKOUT_REQUEST
@@ -192,9 +235,10 @@ export function getLiftsSuccess(): model.IWorkoutsAction {
   }
 }
 
-export function getLiftsError(): model.IWorkoutsAction {
+export function getLiftsError(error): model.IWorkoutsAction {
   return {
-    type: GET_LIFTS_ERROR
+    type: GET_LIFTS_ERROR,
+    error
   }
 }
 

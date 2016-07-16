@@ -11,9 +11,7 @@ export default (
     <Route path="counter" component={Counter} />
     <Route path="stars" component={Stars} />
     <Route path="todos" component={TodoList} />
-    <Route path="workouts" component={Workouts}
-    >
-      <Route path="workouts/:workoutID" component={Workout} />
-    </Route>
+    <Route path="workouts" component={Workouts} />
+    <Route path="workouts/:id" component={Workout} />
   </Route>
 );

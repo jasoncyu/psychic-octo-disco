@@ -1,6 +1,7 @@
 import * as React from 'react'
 import * as workout from '../../redux/modules/workouts'
 import * as _ from 'lodash'
+import * as router from 'react-router'
 const Horizon = require('@horizon/client')
 /* import Autosuggest from 'react-autosuggest'*/
 
@@ -78,8 +79,9 @@ class Workouts extends React.Component<IProps, {}> {
           {this.props.workouts.map(workout => {
              return (
                <li>
-                 {workout.id}
-                 {workout.startTS.toString()}
+                 <router.Link to={`/workouts/${workout.id}`}>
+                   {workout.id}
+                 </router.Link>
                </li>
              )
            })}

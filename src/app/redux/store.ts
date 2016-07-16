@@ -14,7 +14,7 @@ export function configureStore(history, initialState?: any): Redux.Store {
   /** Add Only Dev. Middlewares */
   if (appConfig.env !== 'production' && process.env.BROWSER) {
     const logger = createLogger();
-    middlewares.push(logger);
+    // middlewares.push(logger);
   }
 
   const finalCreateStore = compose(

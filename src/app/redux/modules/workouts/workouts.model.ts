@@ -17,6 +17,20 @@ export interface IWorkoutSaved extends IWorkout {
 
 export interface IWorkoutsAction {
   type: string,
+  payload?: {},
+  error?: Error,
+}
+
+export interface IGetWorkoutAction extends IWorkoutsAction {
+  payload: {
+    id: string
+  }
+}
+
+export interface IGetWorkoutSuccessAction extends IWorkoutsAction {
+  payload: {
+    workout: IWorkout
+  }
 }
 
 // lifts

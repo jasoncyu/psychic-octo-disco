@@ -5,10 +5,11 @@ import * as R from 'ramda'
 
 const { connect } = require('react-redux')
 
+
 interface IProps {
   // The workoutID from the router
   workoutID: string;
-  workout: workout.IWorkout;
+  workout: workout.IWorkoutSaved;
   addLift: () => void;
 
   // The lifts already present on this workout
@@ -16,26 +17,21 @@ interface IProps {
 
   // All lifts that our app knows about.
   allLifts: workout.ILifts;
+  dispatch: Redux.Dispatch;
+
+  // From react-router
+  params: any
 }
 
 @connect(
   (state, ownProps) => {
-    const workoutSetGroups = R.pickBy(
-      (setGroup) => setGroup.workoutID === ownProps.workoutID,
-      state.workouts
-    )
-    return {
-      setGroups: workoutSetGroups,
-      allLifts: state.workouts.lifts,
-    }
+    return {}
   }
 )
+
 class Workout extends React.Component<IProps, {}> {
   componentDidMount() {
-    firebase.getWorkoutByID(this.props.workoutID).then(
-      (workout: workout.IWorkout) => {
-        this.props.workout = workout
-      })
+    this.props.dispatch(workout.getWorkout(this.props.params.id))
   }
 
   getSetGroupsJSX() {
@@ -61,17 +57,15 @@ class Workout extends React.Component<IProps, {}> {
   }
 
   addSetGroup() {
-    // const setGroup: workout.ISetGroup = {
-    //   setIDs: [],
-    //   workoutID: this.props.workoutID,
-    //   percentUp: 10,
-    // }
+    const setGroup: workout.ISetGroup = {
+      workoutID: this.props.workoutID,
+      percentUp: 10,
+    }
   }
 
   render() {
     return (
       <div>
-        {this.props.workout.startTS}
         <button
           onClick={this.addSetGroup}
         >
