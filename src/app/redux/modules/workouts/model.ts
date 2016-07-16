@@ -80,7 +80,10 @@ export interface ISetGroup {
   number?: number;
 
   // The name of the lift being typed that we're searching for.
-  liftNameBeingTyped?: string
+  liftNameBeingTyped?: string;
+
+  // The suggested lifts we're trying to add for this set group
+  liftSuggestions?: ILift[];
 }
 
 export interface ISetGroups {

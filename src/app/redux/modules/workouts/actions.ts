@@ -1,4 +1,5 @@
 import * as model from './model'
+import * as actionUtils from '../actionUtils'
 import * as C from './constants'
 
 /** Action Creators */
@@ -173,6 +174,20 @@ export function addLiftError(error): model.IWorkoutsAction {
   }
 }
 
+export function updateLiftSuggestions(
+  setGroup: model.ISetGroup,
+  typedValue: string
+): model.IWorkoutsAction {
+  return {
+    type: C.UPDATE_LIFT_SUGGESTIONS,
+    payload: {
+      setGroup,
+      typedValue,
+    }
+  }
+}
+
+
 const Horizon = require('@horizon/client')
 const hz = new Horizon();
 
@@ -189,6 +204,7 @@ export function getLifts() {
     })
   }
 }
+
 export function addSetGroup(setGroup) {
   return dispatch => {
     dispatch(addSetGroupRequest(setGroup))

@@ -46,9 +46,12 @@ const getSuggestionValue = (suggestion: workout.ILift) => {
   (dispatch) => {
     return {
       addLift(setGroup: workout.ISetGroup) {
-        cons
-          name: liftName
-        }))
+        const liftName = setGroup.liftNameBeingTyped
+        dispatch(workout.addLift(
+          setGroup,
+          {
+            name: liftName
+          }))
       },
       dispatch
     }
@@ -59,26 +62,12 @@ class Workout extends React.Component<IProps, {}> {
     super()
     this.addSetGroup = this.addSetGroup.bind(this)
     this.getSetGroupsJSX = this.getSetGroupsJSX.bind(this)
-    this.getLiftSuggestions = this.getLiftSuggestions.bind(this)
   }
 
   componentDidMount() {
     this.props.dispatch(workout.getWorkout(this.props.params.id))
     this.props.dispatch(workout.getSetGroups(this.props.params.id))
     this.props.dispatch(workout.getLifts())
-  }
-
-  getLiftSuggestions(value: string) {
-    const inputValue = value.trim().toLowerCase()
-    if (inputValue.length === 0) {
-      return []
-    }
-
-    const matchingLifts = this.props.allLifts.filter(lift => {
-      return lift.name.indexOf(inputValue) !== -1
-    })
-
-    return matchingLifts
   }
 
   addSetGroup() {
@@ -89,12 +78,16 @@ class Workout extends React.Component<IProps, {}> {
     this.props.dispatch(workout.addSetGroup(setGroup))
   }
 
+
   getSetGroupsJSX() {
     if (this.props.setGroups === null) {
       return
     }
 
     return this.props.setGroups.map(setGroup => {
+      /* const onSuggestionsUpdateRequested = ({ value }) => {*/
+      /* this.props.dispatch(workout.updateLiftSuggestions(setGroup, value))*/
+      /* }*/
       const inputProps = {
         value: setGroup.liftNameBeingTyped,
         onChange: (event, {newValue}) => {
@@ -106,12 +99,12 @@ class Workout extends React.Component<IProps, {}> {
       return (
         <div>
           {setGroup.id}
-          {/* <Autosuggest */}
-          {/* suggestions={this.props.allLifts} */}
-          {/* getSuggestionValue={getSuggestionValue} */}
-          {/* renderSuggestion={renderLiftSuggestion} */}
-          {/* inputProps={inputProps} */}
-          {/* /> */}
+          <Autosuggest
+            suggestions={setGroup.liftSuggestions}
+            getSuggestionValue={getSuggestionValue}
+            renderSuggestion={renderLiftSuggestion}
+            inputProps={inputProps}
+          />
 
           <input
             type="text"

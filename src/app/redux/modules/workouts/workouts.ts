@@ -32,6 +32,22 @@ interface SetAndLift {
   lift: model.ILiftSaved;
 }
 
+const getLiftSuggestions = function(allLifts: model.ILift[], value: string) {
+  const inputValue = value.trim().toLowerCase()
+  if (inputValue.length === 0) {
+    return []
+  }
+
+  const matchingLifts = allLifts.filter(lift => {
+    return lift.name.indexOf(inputValue) !== -1
+  })
+
+  return matchingLifts
+}
+
+
+/* Action type checkers */
+
 const changeStateAction = actionUtils.actionCreator<model.ILift>(C.CHANGE_LIFT)
 const firebaseLiftsChanged = actionUtils.actionCreator<model.ILifts>(
   fb.FIREBASE_LIFTS_CHANGED)
@@ -85,6 +101,8 @@ export function workoutsReducer(
       const newSetGroup = Object.assign({}, setGroup)
       if (setGroup.id === action.payload.setGroup.id) {
         newSetGroup.liftNameBeingTyped = action.payload.name
+        newSetGroup.liftSuggestions = getLiftSuggestions(
+          state.lifts, newSetGroup.liftNameBeingTyped)
       }
 
       return newSetGroup
@@ -106,6 +124,20 @@ export function workoutsReducer(
 
     return Object.assign({}, state, {
       setGroups
+    })
+  } else if (action.type === C.UPDATE_LIFT_SUGGESTIONS) {
+    const newSetGroups = state.setGroups.map(setGroup => {
+      const newSetGroup = Object.assign({}, setGroup)
+      if (setGroup.id === action.payload.setGroup.id) {
+        newSetGroup.liftSuggestions = getLiftSuggestions(
+          state.lifts, action.payload.setGroup.liftNameBeingTyped)
+      }
+
+      return newSetGroup
+    })
+
+    return Object.assign({}, state, {
+      setGroups: newSetGroups
     })
   }
   return state
