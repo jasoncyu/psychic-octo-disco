@@ -1,4 +1,4 @@
-import * as model from './workouts.model'
+import * as model from './model'
 import * as fb from '../firebase/firebase'
 import * as actionUtils from '../actionUtils'
 

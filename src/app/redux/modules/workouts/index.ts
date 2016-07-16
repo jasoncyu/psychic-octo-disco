@@ -1,2 +1,2 @@
 export * from './workouts'
-export * from './workouts.model'
+export * from './model'

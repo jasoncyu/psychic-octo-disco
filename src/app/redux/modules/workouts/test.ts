@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import * as model from './workouts.model'
+import * as model from './model'
 const Horizon = require('@horizon/client')
 const hz = Horizon({
   host: 'localhost'
