@@ -1,46 +1,10 @@
 import * as model from './model'
 import * as fb from '../firebase/firebase'
 import * as actionUtils from '../actionUtils'
+import * as C from './constants'
 
 const Horizon = require('@horizon/client')
 const hz = new Horizon();
-
-/** Action types */
-export const ADD_WORKOUT: string = 'ADD_WORKOUT'
-export const ADD_WORKOUT_REQUEST: string = 'ADD_WORKOUT_REQUEST'
-export const ADD_WORKOUT_SUCCESS: string = 'ADD_WORKOUT_SUCCESS'
-export const ADD_WORKOUT_ERROR: string = 'ADD_WORKOUT_ERROR'
-
-export const CHANGE_LIFT: string = 'CHANGE_LIFT'
-export const SET_CURRENT_WORKOUT: string = 'SET_CURRENT_WORKOUT'
-
-export const GET_WORKOUT_REQUEST: string = 'GET_WORKOUT_REQUEST'
-export const GET_WORKOUT_SUCCESS: string = 'GET_WORKOUT_SUCCESS'
-export const GET_WORKOUT_ERROR: string = 'GET_WORKOUT_ERROR'
-
-export const GET_SET_GROUPS_REQUEST: string = 'GET_SET_GROUPS_REQUEST'
-export const GET_SET_GROUPS_SUCCESS: string = 'GET_SET_GROUPS_SUCCESS'
-export const GET_SET_GROUPS_ERROR: string = 'GET_SET_GROUPS_ERROR'
-
-export const ADD_SET_REQUEST: string = 'ADD_SET_REQUEST'
-export const ADD_SET_SUCCESS: string = 'ADD_SET_SUCCESS'
-export const ADD_SET_ERROR: string = 'ADD_SET_ERROR'
-
-export const GET_WORKOUTS_REQUEST: string = 'GET_WORKOUTS_REQUEST'
-export const GET_WORKOUTS_SUCCESS: string = 'GET_WORKOUTS_SUCCESS'
-export const GET_WORKOUTS_ERROR: string = 'GET_WORKOUTS_ERROR'
-
-export const ADD_SET_GROUP_REQUEST: string = 'ADD_SET_GROUP_REQUEST'
-export const ADD_SET_GROUP_SUCCESS: string = 'ADD_SET_GROUP_SUCCESS'
-export const ADD_SET_GROUP_ERROR: string = 'ADD_SET_GROUP_ERROR'
-
-// Update the LIFT that a set group belongs to
-export const UPDATE_SET_GROUP_LIFT = 'UPDATE_SET_GROUP_LIFT'
-
-// Get all lifts
-export const GET_LIFTS_REQUEST: string = 'GET_LIFTS_REQUEST'
-export const GET_LIFTS_SUCCESS: string = 'GET_LIFTS_SUCCESS'
-export const GET_LIFTS_ERROR: string = 'GET_LIFTS_ERROR'
 
 interface IState {
   // The workouts I've done.
@@ -71,13 +35,13 @@ interface SetAndLift {
   lift: model.ILiftSaved;
 }
 
-const changeStateAction = actionUtils.actionCreator<model.ILift>(CHANGE_LIFT)
+const changeStateAction = actionUtils.actionCreator<model.ILift>(C.CHANGE_LIFT)
 const firebaseLiftsChanged = actionUtils.actionCreator<model.ILifts>(
   fb.FIREBASE_LIFTS_CHANGED)
 const setCurrentWorkout = actionUtils.actionCreator<model.IWorkout>(
-  SET_CURRENT_WORKOUT)
+  C.SET_CURRENT_WORKOUT)
 const updateSetGroupLift = actionUtils.actionCreator<SetAndLift>(
-  UPDATE_SET_GROUP_LIFT
+  C.UPDATE_SET_GROUP_LIFT
 )
 
 /** Reducer */
@@ -107,19 +71,19 @@ export function workoutsReducer(
     return Object.assign({}, state, {
       setGroups: newSetGroups
     })
-  } else if (action.type === GET_WORKOUTS_SUCCESS) {
+  } else if (action.type === C.GET_WORKOUTS_SUCCESS) {
     return Object.assign({}, state, {
       workouts: action.payload.workouts
     })
-  } else if (action.type === GET_WORKOUT_SUCCESS) {
+  } else if (action.type === C.GET_WORKOUT_SUCCESS) {
     return Object.assign({}, state, {
       workout: action.payload.workout
     })
-  } else if (action.type === GET_SET_GROUPS_SUCCESS) {
+  } else if (action.type === C.GET_SET_GROUPS_SUCCESS) {
     return Object.assign({}, state, {
       setGroups: action.payload.setGroups
     })
-  } else if (action.type === GET_LIFTS_SUCCESS) {
+  } else if (action.type === C.GET_LIFTS_SUCCESS) {
     return Object.assign({}, state, {
       lifts: action.payload.lifts
     })
@@ -160,7 +124,7 @@ export function getSetGroups(workoutID: string): Redux.Dispatch {
 
     hz('setGroups').findAll({workoutID}).watch().subscribe(setGroups => {
       dispatch({
-        type: GET_SET_GROUPS_SUCCESS,
+        type: C.GET_SET_GROUPS_SUCCESS,
         payload: {
           setGroups
         }
@@ -168,7 +132,7 @@ export function getSetGroups(workoutID: string): Redux.Dispatch {
     }, (err) => {
       console.error(err)
       dispatch({
-        type: GET_SET_GROUPS_ERROR,
+        type: C.GET_SET_GROUPS_ERROR,
         error: err
       })
     })
@@ -178,12 +142,12 @@ export function getSetGroups(workoutID: string): Redux.Dispatch {
 export function getWorkouts(): Redux.Dispatch {
   return dispatch => {
     dispatch({
-      type: GET_WORKOUTS_REQUEST
+      type: C.GET_WORKOUTS_REQUEST
     })
 
     hz('workouts').watch().subscribe(workouts => {
       dispatch({
-        type: GET_WORKOUTS_SUCCESS,
+        type: C.GET_WORKOUTS_SUCCESS,
         payload: {
           workouts
         }
@@ -191,7 +155,7 @@ export function getWorkouts(): Redux.Dispatch {
       return workouts
     }, (err) => {
       dispatch({
-        type: GET_WORKOUTS_ERROR
+        type: C.GET_WORKOUTS_ERROR
       })
     })
   }
@@ -227,7 +191,7 @@ export function addWorkout(workout: model.IWorkout): Redux.Dispatch {
 export function getSetGroupsRequest(
   workoutID: string): model.IWorkoutsAction {
   return {
-    type: GET_SET_GROUPS_REQUEST,
+    type: C.GET_SET_GROUPS_REQUEST,
     payload: {
       workoutID
     }
@@ -236,19 +200,19 @@ export function getSetGroupsRequest(
 
 export function getSetGroupsSuccess(): model.IWorkoutsAction {
   return {
-    type: GET_SET_GROUPS_SUCCESS
+    type: C.GET_SET_GROUPS_SUCCESS
   }
 }
 
 export function getSetGroupsError(): model.IWorkoutsAction {
   return {
-    type: GET_SET_GROUPS_ERROR
+    type: C.GET_SET_GROUPS_ERROR
   }
 }
 export function addSetGroupRequest(
   setGroup: model.ISetGroup): model.IWorkoutsAction {
   return {
-    type: ADD_SET_GROUP_REQUEST,
+    type: C.ADD_SET_GROUP_REQUEST,
     payload: {
       setGroup
     }
@@ -257,20 +221,20 @@ export function addSetGroupRequest(
 
 export function addSetGroupSuccess(): model.IWorkoutsAction {
   return {
-    type: ADD_SET_GROUP_SUCCESS
+    type: C.ADD_SET_GROUP_SUCCESS
   }
 }
 
 export function addSetGroupError(error): model.IWorkoutsAction {
   return {
-    type: ADD_SET_GROUP_ERROR,
+    type: C.ADD_SET_GROUP_ERROR,
     error
   }
 }
 
 export function getWorkoutRequest(id: string): model.IGetWorkoutAction {
   return {
-    type: GET_WORKOUT_REQUEST,
+    type: C.GET_WORKOUT_REQUEST,
     payload: {
       id
     }
@@ -279,7 +243,7 @@ export function getWorkoutRequest(id: string): model.IGetWorkoutAction {
 
 export function getWorkoutSuccess(workout: model.IWorkout): model.IWorkoutsAction {
   return {
-    type: GET_WORKOUT_SUCCESS,
+    type: C.GET_WORKOUT_SUCCESS,
     payload: {
       workout
     }
@@ -288,56 +252,56 @@ export function getWorkoutSuccess(workout: model.IWorkout): model.IWorkoutsActio
 
 export function getWorkoutError(err: any): model.IWorkoutsAction {
   return {
-    type: GET_WORKOUT_ERROR,
+    type: C.GET_WORKOUT_ERROR,
     error: err
   }
 }
 
 export function addWorkoutRequest(): model.IWorkoutsAction {
   return {
-    type: ADD_WORKOUT_REQUEST
+    type: C.ADD_WORKOUT_REQUEST
   }
 }
 
 export function addWorkoutSuccess(): model.IWorkoutsAction {
   return {
-    type: ADD_WORKOUT_SUCCESS
+    type: C.ADD_WORKOUT_SUCCESS
   }
 }
 
 export function addWorkoutError(): model.IWorkoutsAction {
   return {
-    type: ADD_WORKOUT_ERROR
+    type: C.ADD_WORKOUT_ERROR
   }
 }
 
 export function addSetRequest(): model.IWorkoutsAction {
   return {
-    type: ADD_SET_REQUEST
+    type: C.ADD_SET_REQUEST
   }
 }
 
 export function addSetSuccess(): model.IWorkoutsAction {
   return {
-    type: ADD_SET_SUCCESS
+    type: C.ADD_SET_SUCCESS
   }
 }
 
 export function addSetError(): model.IWorkoutsAction {
   return {
-    type: ADD_SET_ERROR
+    type: C.ADD_SET_ERROR
   }
 }
 
 export function getLiftsRequest(): model.IWorkoutsAction {
   return {
-    type: GET_LIFTS_REQUEST
+    type: C.GET_LIFTS_REQUEST
   }
 }
 
 export function getLiftsSuccess(lifts): model.IWorkoutsAction {
   return {
-    type: GET_LIFTS_SUCCESS,
+    type: C.GET_LIFTS_SUCCESS,
     payload: {
       lifts
     }
@@ -346,7 +310,7 @@ export function getLiftsSuccess(lifts): model.IWorkoutsAction {
 
 export function getLiftsError(error): model.IWorkoutsAction {
   return {
-    type: GET_LIFTS_ERROR,
+    type: C.GET_LIFTS_ERROR,
     error
   }
 }
@@ -361,7 +325,7 @@ export function getLiftsAsync() {
 
 export function changeLift() {
   return {
-    type: CHANGE_LIFT
+    type: C.CHANGE_LIFT
   }
 }
 
