@@ -26,7 +26,8 @@ interface IProps {
 @connect(
   (state, ownProps) => {
     return {
-      setGroups: state.workouts.setGroups
+      setGroups: state.workouts.setGroups,
+      allLifts: state.workouts.lifts
     }
   }
 )
@@ -41,6 +42,7 @@ class Workout extends React.Component<IProps, {}> {
   componentDidMount() {
     this.props.dispatch(workout.getWorkout(this.props.params.id))
     this.props.dispatch(workout.getSetGroups(this.props.params.id))
+    this.props.dispatch(workout.getLifts())
   }
 
   addSetGroup() {

@@ -119,12 +119,28 @@ export function workoutsReducer(
     return Object.assign({}, state, {
       setGroups: action.payload.setGroups
     })
+  } else if (action.type === GET_LIFTS_SUCCESS) {
+    return Object.assign({}, state, {
+      lifts: action.payload.lifts
+    })
   }
 
   return state
 }
 
 /** Async Action Creator */
+export function getLifts() {
+  return dispatch => {
+    dispatch(getLiftsRequest())
+
+    hz('lifts').above({id: ''}).watch().subscribe(lifts => {
+      dispatch(getLiftsSuccess(lifts))
+    }, (err) => {
+      console.error(err)
+      dispatch(getLiftsError(err))
+    })
+  }
+}
 export function addSetGroup(setGroup) {
   return dispatch => {
     dispatch(addSetGroupRequest(setGroup))
@@ -188,7 +204,7 @@ export function getWorkout(id: string) {
     hz('workouts').find(id).watch().subscribe(workout => {
       dispatch(getWorkoutSuccess(workout))
     }, (err) => {
-      dispatch(getLiftsError(err))
+      dispatch(getWorkoutError(err))
     })
   }
 }
@@ -319,9 +335,12 @@ export function getLiftsRequest(): model.IWorkoutsAction {
   }
 }
 
-export function getLiftsSuccess(): model.IWorkoutsAction {
+export function getLiftsSuccess(lifts): model.IWorkoutsAction {
   return {
-    type: GET_LIFTS_SUCCESS
+    type: GET_LIFTS_SUCCESS,
+    payload: {
+      lifts
+    }
   }
 }
 
