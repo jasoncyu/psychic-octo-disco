@@ -10,7 +10,7 @@ interface IState {
   newLift?: model.ILift;
   // The currently selected lift to add data for.
   currentLift: model.ILift;
-  lifts: model.ILifts;
+  lifts: model.ILift[];
 
   // The current workout being viewed.
   workout: model.IWorkout;
@@ -22,7 +22,7 @@ const initialState: IState = {
   workouts: [],
   newLift: null,
   currentLift: null,
-  lifts: {},
+  lifts: [],
   workout: null,
   setGroups: [],
 }
@@ -49,10 +49,6 @@ export function workoutsReducer(
   if (actionUtils.isType(action, changeStateAction)) {
     return Object.assign({}, state, {
       newLift: action.payload
-    })
-  } else if (actionUtils.isType(action, firebaseLiftsChanged)) {
-    return Object.assign({}, state, {
-      allLifts: action.payload
     })
   } else if (actionUtils.isType(action, setCurrentWorkout)) {
     return Object.assign({}, state, {
@@ -84,8 +80,20 @@ export function workoutsReducer(
     return Object.assign({}, state, {
       lifts: action.payload.lifts
     })
-  }
+  } else if (action.type === C.CHANGE_LIFT_NAME_BEING_TYPED) {
+    const newSetGroups = state.setGroups.map(setGroup => {
+      const newSetGroup = Object.assign({}, setGroup)
+      if (setGroup.id === action.payload.setGroup.id) {
+        newSetGroup.liftNameBeingTyped = action.payload.name
+      }
 
+      return newSetGroup
+    })
+
+    return Object.assign({}, state, {
+      setGroups: newSetGroups
+    })
+  }
   return state
 }
 

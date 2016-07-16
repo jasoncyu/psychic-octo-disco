@@ -136,6 +136,38 @@ export function changeLift() {
   }
 }
 
+export function changeLiftNameBeingTyped(setGroup, name) {
+  return {
+    type: C.CHANGE_LIFT_NAME_BEING_TYPED,
+    payload: {
+      setGroup,
+      name
+    }
+  }
+}
+
+export function addLiftRequest(lift): model.IWorkoutsAction {
+  return {
+    type: C.ADD_LIFT_REQUEST,
+    payload: {
+      lift
+    }
+  }
+}
+
+export function addLiftSuccess(): model.IWorkoutsAction {
+  return {
+    type: C.ADD_LIFT_SUCCESS
+  }
+}
+
+export function addLiftError(error): model.IWorkoutsAction {
+  return {
+    type: C.ADD_LIFT_ERROR,
+    error,
+  }
+}
+
 const Horizon = require('@horizon/client')
 const hz = new Horizon();
 
@@ -229,6 +261,20 @@ export function addWorkout(workout: model.IWorkout): Redux.Dispatch {
         dispatch(addWorkoutSuccess())
       }, (err) => {
         dispatch(addWorkoutError())
+      })
+  }
+}
+
+export function addLift(lift: model.ILift) {
+  return dispatch => {
+    dispatch(addLiftRequest(lift))
+
+    hz('lifts').store(lift)
+      .subscribe((id) => {
+        dispatch(addLiftSuccess())
+      }, (err) => {
+        console.error(err)
+        dispatch(addLiftError(err))
       })
   }
 }

@@ -3,6 +3,10 @@ import * as workout from '../../redux/modules/workouts'
 import * as React from 'react'
 import * as R from 'ramda'
 
+// Need to use require() because 'react-autosuggest' isn't known at compile-time
+// import * as Autosuggest from 'react-autosuggest';
+const Autosuggest = require('react-autosuggest')
+
 const { connect } = require('react-redux')
 
 
@@ -10,39 +14,73 @@ interface IProps {
   // The workoutID from the router
   workoutID: string;
   workout: workout.IWorkoutSaved;
-  addLift: () => void;
+  addLift: (setGroup: workout.ISetGroup) => void;
 
   // The lifts already present on this workout
   setGroups: workout.ISetGroup[];
 
   // All lifts that our app knows about.
-  allLifts: workout.ILifts;
+  allLifts: workout.ILift[];
   dispatch: Redux.Dispatch;
 
   // From react-router
   params: any
 }
 
+
+const renderLiftSuggestion = (suggestion: workout.ILift) => {
+  return <span>{suggestion.name}</span>
+}
+
+const getSuggestionValue = (suggestion: workout.ILift) => {
+  return suggestion.name
+}
+
 @connect(
   (state, ownProps) => {
     return {
       setGroups: state.workouts.setGroups,
-      allLifts: state.workouts.lifts
+      allLifts: state.workouts.lifts,
+    }
+  },
+  (dispatch) => {
+    return {
+      addLift(setGroup: workout.ISetGroup) {
+        console.log(setGroup)
+        const liftName = setGroup.liftNameBeingTyped
+        dispatch(workout.addLift({
+          name: liftName
+        }))
+      },
+      dispatch
     }
   }
 )
-
 class Workout extends React.Component<IProps, {}> {
   constructor() {
     super()
     this.addSetGroup = this.addSetGroup.bind(this)
     this.getSetGroupsJSX = this.getSetGroupsJSX.bind(this)
+    this.getLiftSuggestions = this.getLiftSuggestions.bind(this)
   }
 
   componentDidMount() {
     this.props.dispatch(workout.getWorkout(this.props.params.id))
     this.props.dispatch(workout.getSetGroups(this.props.params.id))
     this.props.dispatch(workout.getLifts())
+  }
+
+  getLiftSuggestions(value: string) {
+    const inputValue = value.trim().toLowerCase()
+    if (inputValue.length === 0) {
+      return []
+    }
+
+    const matchingLifts = this.props.allLifts.filter(lift => {
+      return lift.name.indexOf(inputValue) !== -1
+    })
+
+    return matchingLifts
   }
 
   addSetGroup() {
@@ -59,9 +97,33 @@ class Workout extends React.Component<IProps, {}> {
     }
 
     return this.props.setGroups.map(setGroup => {
+      const inputProps = {
+        value: setGroup.liftNameBeingTyped,
+        onChange: (event, {newValue}) => {
+          this.props.dispatch(workout.changeLiftNameBeingTyped(setGroup, newValue))
+        },
+        type: 'search',
+        placeholder: 'Enter lift name'
+      }
       return (
         <div>
           {setGroup.id}
+          <Autosuggest
+            suggestions={this.props.allLifts}
+            getSuggestions={this.getLiftSuggestions}
+            getSuggestionValue={getSuggestionValue}
+            renderSuggestion={renderLiftSuggestion}
+            inputProps={inputProps}
+          />
+
+          <button
+            onClick={() =>{
+              this.props.addLift(setGroup)
+            }}
+          >
+            Add Lift
+          </button>
+
         </div>
       )
     })

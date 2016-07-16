@@ -31,4 +31,9 @@ export const GET_LIFTS_REQUEST: string = 'GET_LIFTS_REQUEST'
 export const GET_LIFTS_SUCCESS: string = 'GET_LIFTS_SUCCESS'
 export const GET_LIFTS_ERROR: string = 'GET_LIFTS_ERROR'
 
+export const ADD_LIFT_REQUEST: string = 'ADD_LIFT_REQUEST'
+export const ADD_LIFT_SUCCESS: string = 'ADD_LIFT_SUCCESS'
+export const ADD_LIFT_ERROR: string = 'ADD_LIFT_ERROR'
+
 export const UPDATE_SET_GROUP_LIFT: string = 'UPDATE_SET_GROUP_LIFT'
+export const CHANGE_LIFT_NAME_BEING_TYPED = '/CHANGE_LIFT_NAME_BEING_TYPED'

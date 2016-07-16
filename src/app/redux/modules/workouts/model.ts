@@ -46,10 +46,10 @@ export interface ILifts {
   [id: string]: ILift
 }
 
-type ProgressionScheme = "A" | "B"
-const ProgressionSchemeEnum = {
-  SETS_ACROSS: 'SETS_ACROSS' as ProgressionScheme,
-}
+// type ProgressionScheme = "A" | "B"
+// const ProgressionSchemeEnum = {
+//   SETS_ACROSS: 'SETS_ACROSS' as ProgressionScheme,
+// }
 
 // A group of sets. 'group' meaning that these sets are performed together.
 // These are usually the same Lift.
@@ -69,7 +69,7 @@ export interface ISetGroup {
   // set group hasn't been performed, but the user plans to perform it.
   plannedWorkoutID?: string;
   // How we generate future set groups based on this one.
-  progressionScheme?: ProgressionScheme
+  // progressionScheme?: ProgressionScheme
 
   // Percentage we should increase in weight for the next set group.
   // 10 means we want to go 10% up in weight.
@@ -78,6 +78,9 @@ export interface ISetGroup {
   // The number showing the order that these set groups were performed.
   // So if I do a set group of bench press first, that is set group 1.
   number?: number;
+
+  // The name of the lift being typed that we're searching for.
+  liftNameBeingTyped?: string
 }
 
 export interface ISetGroups {
