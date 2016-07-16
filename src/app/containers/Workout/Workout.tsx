@@ -46,9 +46,7 @@ const getSuggestionValue = (suggestion: workout.ILift) => {
   (dispatch) => {
     return {
       addLift(setGroup: workout.ISetGroup) {
-        console.log(setGroup)
-        const liftName = setGroup.liftNameBeingTyped
-        dispatch(workout.addLift({
+        cons
           name: liftName
         }))
       },
@@ -108,12 +106,19 @@ class Workout extends React.Component<IProps, {}> {
       return (
         <div>
           {setGroup.id}
-          <Autosuggest
-            suggestions={this.props.allLifts}
-            getSuggestions={this.getLiftSuggestions}
-            getSuggestionValue={getSuggestionValue}
-            renderSuggestion={renderLiftSuggestion}
-            inputProps={inputProps}
+          {/* <Autosuggest */}
+          {/* suggestions={this.props.allLifts} */}
+          {/* getSuggestionValue={getSuggestionValue} */}
+          {/* renderSuggestion={renderLiftSuggestion} */}
+          {/* inputProps={inputProps} */}
+          {/* /> */}
+
+          <input
+            type="text"
+            onChange={(evt) => {
+              const target = evt.target as any
+              this.props.dispatch(workout.changeLiftNameBeingTyped(setGroup, target.value))
+            }}
           />
 
           <button

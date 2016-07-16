@@ -146,18 +146,23 @@ export function changeLiftNameBeingTyped(setGroup, name) {
   }
 }
 
-export function addLiftRequest(lift): model.IWorkoutsAction {
+export function addLiftRequest(setGroup, lift): model.IWorkoutsAction {
   return {
     type: C.ADD_LIFT_REQUEST,
     payload: {
+      setGroup,
       lift
     }
   }
 }
 
-export function addLiftSuccess(): model.IWorkoutsAction {
+export function addLiftSuccess(id, setGroup): model.IWorkoutsAction {
   return {
-    type: C.ADD_LIFT_SUCCESS
+    type: C.ADD_LIFT_SUCCESS,
+    payload: {
+      id,
+      setGroup
+    }
   }
 }
 
@@ -265,13 +270,13 @@ export function addWorkout(workout: model.IWorkout): Redux.Dispatch {
   }
 }
 
-export function addLift(lift: model.ILift) {
+export function addLift(setGroup: model.ISetGroup, lift: model.ILift) {
   return dispatch => {
-    dispatch(addLiftRequest(lift))
+    dispatch(addLiftRequest(setGroup, lift))
 
     hz('lifts').store(lift)
       .subscribe((id) => {
-        dispatch(addLiftSuccess())
+        dispatch(addLiftSuccess(id, setGroup))
       }, (err) => {
         console.error(err)
         dispatch(addLiftError(err))

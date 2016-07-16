@@ -93,6 +93,20 @@ export function workoutsReducer(
     return Object.assign({}, state, {
       setGroups: newSetGroups
     })
+  } else if (action.type === C.ADD_LIFT_SUCCESS) {
+    const setGroups = state.setGroups.map(setGroup => {
+      const newSetGroup = Object.assign({}, setGroup)
+      if (setGroup.id === action.payload.setGroup.id) {
+        newSetGroup.liftNameBeingTyped = ''
+        newSetGroup.liftID = action.payload.id
+      }
+
+      return newSetGroup
+    })
+
+    return Object.assign({}, state, {
+      setGroups
+    })
   }
   return state
 }
