@@ -1,7 +1,4 @@
 import * as model from './model'
-import * as fb from '../firebase/firebase'
-import * as actionUtils from '../actionUtils'
-import * as C from './constants'
 import * as actions from './actions'
 
 interface IState {

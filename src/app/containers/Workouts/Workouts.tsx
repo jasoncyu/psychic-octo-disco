@@ -53,7 +53,7 @@ class Workouts extends React.Component<IProps, {}> {
   handleChange(evt) {
     const name = evt.target.value
     this.props.dispatch({
-      type: workout.CHANGE_LIFT,
+      type: 'CHANGE_LIFT',
       payload: {
         name,
       }

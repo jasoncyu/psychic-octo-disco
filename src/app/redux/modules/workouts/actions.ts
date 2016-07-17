@@ -1,6 +1,4 @@
 import * as model from './model'
-import * as actionUtils from '../actionUtils'
-import * as C from './constants'
 
 /** Action Creators */
 export interface GetSetGroupsRequestAction {
@@ -363,7 +361,7 @@ export function getSetGroups(workoutID: string): Redux.Dispatch {
     }, (err) => {
       console.error(err)
       dispatch({
-        type: C.GET_SET_GROUPS_ERROR,
+        type: 'GET_SET_GROUPS_ERROR',
         error: err
       })
     })
@@ -373,7 +371,7 @@ export function getSetGroups(workoutID: string): Redux.Dispatch {
 export function getWorkouts(): Redux.Dispatch {
   return dispatch => {
     dispatch({
-      type: C.GET_WORKOUTS_REQUEST
+      type: 'GET_WORKOUTS_REQUEST'
     })
 
     hz('workouts').watch().subscribe(workouts => {
@@ -381,7 +379,7 @@ export function getWorkouts(): Redux.Dispatch {
       return workouts
     }, (err) => {
       dispatch({
-        type: C.GET_WORKOUTS_ERROR
+        type: 'GET_WORKOUTS_ERROR'
       })
     })
   }
