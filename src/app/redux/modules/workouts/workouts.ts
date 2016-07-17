@@ -2,6 +2,7 @@ import * as model from './model'
 import * as fb from '../firebase/firebase'
 import * as actionUtils from '../actionUtils'
 import * as C from './constants'
+import * as actions from './actions'
 
 interface IState {
   // The workouts I've done.
@@ -48,59 +49,35 @@ const getLiftSuggestions = function(allLifts: model.ILift[], value: string) {
 
 /* Action type checkers */
 
-const changeStateAction = actionUtils.actionCreator<model.ILift>(C.CHANGE_LIFT)
-const firebaseLiftsChanged = actionUtils.actionCreator<model.ILifts>(
-  fb.FIREBASE_LIFTS_CHANGED)
-const setCurrentWorkout = actionUtils.actionCreator<model.IWorkout>(
-  C.SET_CURRENT_WORKOUT)
-const updateSetGroupLift = actionUtils.actionCreator<SetAndLift>(
-  C.UPDATE_SET_GROUP_LIFT
-)
-
 /** Reducer */
 export function workoutsReducer(
   state = initialState,
-  action: actionUtils.Action<any>
+  action: actions.Action
 ) {
-  if (actionUtils.isType(action, changeStateAction)) {
-    return Object.assign({}, state, {
-      newLift: action.payload
-    })
-  } else if (actionUtils.isType(action, setCurrentWorkout)) {
-    return Object.assign({}, state, {
-
-    })
-  } else if (actionUtils.isType(action, updateSetGroupLift)) {
-    const newSetGroups = state.setGroups
-      .filter(setGroup => setGroup.id === action.payload.setGroup.id)
-      .map(setGroup => {
-        setGroup.liftID = action.payload.lift.id
-        return setGroup
-      })
-    return Object.assign({}, state, {
-      setGroups: newSetGroups
-    })
-  } else if (action.type === C.GET_WORKOUTS_SUCCESS) {
+  if (action.type === 'GET_WORKOUTS_SUCCESS') {
     return Object.assign({}, state, {
       workouts: action.payload.workouts
     })
-  } else if (action.type === C.GET_WORKOUT_SUCCESS) {
+  } else if (action.type === 'GET_WORKOUT_SUCCESS') {
     return Object.assign({}, state, {
       workout: action.payload.workout
     })
-  } else if (action.type === C.GET_SET_GROUPS_SUCCESS) {
+  } else if (action.type === 'GET_SET_GROUPS_SUCCESS') {
     return Object.assign({}, state, {
       setGroups: action.payload.setGroups
     })
-  } else if (action.type === C.GET_LIFTS_SUCCESS) {
+  } else if (action.type === 'GET_LIFTS_SUCCESS') {
     return Object.assign({}, state, {
       lifts: action.payload.lifts
     })
-  } else if (action.type === C.CHANGE_LIFT_NAME_BEING_TYPED) {
+  } else if (action.type === 'CHANGE_LIFT_NAME_BEING_TYPED') {
+    const actionSetGroupID = action.payload.setGroup.id
+    const actionName = action.payload.name
+
     const newSetGroups = state.setGroups.map(setGroup => {
       const newSetGroup = Object.assign({}, setGroup)
-      if (setGroup.id === action.payload.setGroup.id) {
-        newSetGroup.liftNameBeingTyped = action.payload.name
+      if (setGroup.id === actionSetGroupID) {
+        newSetGroup.liftNameBeingTyped = actionName
         newSetGroup.liftSuggestions = getLiftSuggestions(
           state.lifts, newSetGroup.liftNameBeingTyped)
       }
@@ -111,12 +88,15 @@ export function workoutsReducer(
     return Object.assign({}, state, {
       setGroups: newSetGroups
     })
-  } else if (action.type === C.ADD_LIFT_SUCCESS) {
+  } else if (action.type === 'ADD_LIFT_SUCCESS') {
+    const actionSetGroupID = action.payload.setGroup.id
+    const actionLiftID = action.payload.id
+
     const setGroups = state.setGroups.map(setGroup => {
       const newSetGroup = Object.assign({}, setGroup)
-      if (setGroup.id === action.payload.setGroup.id) {
+      if (setGroup.id === actionSetGroupID) {
         newSetGroup.liftNameBeingTyped = ''
-        newSetGroup.liftID = action.payload.id
+        newSetGroup.liftID = actionLiftID
       }
 
       return newSetGroup
@@ -125,12 +105,14 @@ export function workoutsReducer(
     return Object.assign({}, state, {
       setGroups
     })
-  } else if (action.type === C.UPDATE_LIFT_SUGGESTIONS) {
+  } else if (action.type === 'UPDATE_LIFT_SUGGESTIONS') {
+    const actionSetGroupID = action.payload.setGroup.id
+    const actionLiftName = action.payload.setGroup.liftNameBeingTyped
     const newSetGroups = state.setGroups.map(setGroup => {
       const newSetGroup = Object.assign({}, setGroup)
-      if (setGroup.id === action.payload.setGroup.id) {
+      if (setGroup.id === actionSetGroupID) {
         newSetGroup.liftSuggestions = getLiftSuggestions(
-          state.lifts, action.payload.setGroup.liftNameBeingTyped)
+          state.lifts, actionLiftName)
       }
 
       return newSetGroup

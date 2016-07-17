@@ -3,143 +3,250 @@ import * as actionUtils from '../actionUtils'
 import * as C from './constants'
 
 /** Action Creators */
+export interface GetSetGroupsRequestAction {
+  type: 'GET_SET_GROUPS_REQUEST'
+}
 export function getSetGroupsRequest(
   workoutID: string): model.IWorkoutsAction {
   return {
-    type: C.GET_SET_GROUPS_REQUEST,
+    type: 'GET_SET_GROUPS_REQUEST',
     payload: {
       workoutID
     }
   }
 }
-
-export function getSetGroupsSuccess(): model.IWorkoutsAction {
+export interface GetSetGroupsSuccessAction {
+  type: 'GET_SET_GROUPS_SUCCESS',
+  payload: {
+    setGroups: model.ISetGroup[]
+  }
+}
+export function getSetGroupsSuccess(
+  setGroups: model.ISetGroup[]
+): GetSetGroupsSuccessAction {
   return {
-    type: C.GET_SET_GROUPS_SUCCESS
+    type: 'GET_SET_GROUPS_SUCCESS',
+    payload: {
+      setGroups
+    }
   }
 }
 
-export function getSetGroupsError(): model.IWorkoutsAction {
+export interface GetSetGroupsErrorAction {
+  type: 'GET_SET_GROUPS_ERROR'
+}
+export function getSetGroupsError(): GetSetGroupsErrorAction {
   return {
-    type: C.GET_SET_GROUPS_ERROR
+    type: 'GET_SET_GROUPS_ERROR'
+  }
+}
+
+export interface AddSetGroupRequestAction {
+  type: 'ADD_SET_GROUP_REQUEST',
+  payload: {
+    setGroup: model.ISetGroup
   }
 }
 export function addSetGroupRequest(
-  setGroup: model.ISetGroup): model.IWorkoutsAction {
+  setGroup: model.ISetGroup): AddSetGroupRequestAction {
   return {
-    type: C.ADD_SET_GROUP_REQUEST,
+    type: 'ADD_SET_GROUP_REQUEST',
     payload: {
       setGroup
     }
   }
 }
 
-export function addSetGroupSuccess(): model.IWorkoutsAction {
+export interface AddSetGroupSuccessAction {
+  type: 'ADD_SET_GROUP_SUCCESS'
+}
+export function addSetGroupSuccess(): AddSetGroupSuccessAction {
   return {
-    type: C.ADD_SET_GROUP_SUCCESS
+    type: 'ADD_SET_GROUP_SUCCESS'
   }
 }
-
-export function addSetGroupError(error): model.IWorkoutsAction {
+export interface AddSetGroupErrorAction {
+  type: 'ADD_SET_GROUP_ERROR',
+  error: Error
+}
+export function addSetGroupError(error: Error): AddSetGroupErrorAction {
   return {
-    type: C.ADD_SET_GROUP_ERROR,
+    type: 'ADD_SET_GROUP_ERROR',
     error
   }
 }
 
-export function getWorkoutRequest(id: string): model.IGetWorkoutAction {
+export interface GetWorkoutRequestAction {
+  type: 'GET_WORKOUT_REQUEST',
+  payload: {
+    id: string
+  }
+}
+export function getWorkoutRequest(id: string): GetWorkoutRequestAction {
   return {
-    type: C.GET_WORKOUT_REQUEST,
+    type: 'GET_WORKOUT_REQUEST',
     payload: {
       id
     }
   }
 }
 
+export interface GetWorkoutSuccessAction {
+  type: 'GET_WORKOUT_SUCCESS',
+  payload: {
+    workout: model.IWorkout
+  }
+}
 export function getWorkoutSuccess(
-  workout: model.IWorkout): model.IWorkoutsAction {
+  workout: model.IWorkout
+): model.IGetWorkoutSuccessAction {
   return {
-    type: C.GET_WORKOUT_SUCCESS,
+    type: 'GET_WORKOUT_SUCCESS',
     payload: {
       workout
     }
   }
 }
 
-export function getWorkoutError(err: any): model.IWorkoutsAction {
+export interface GetWorkoutsSuccessAction {
+  type: 'GET_WORKOUTS_SUCCESS',
+  payload: {
+    workouts: model.IWorkout[]
+  }
+}
+export function getWorkoutsSuccess(
+  workouts: model.IWorkout[]
+): GetWorkoutsSuccessAction {
   return {
-    type: C.GET_WORKOUT_ERROR,
+    type: 'GET_WORKOUTS_SUCCESS',
+    payload: {
+      workouts
+    }
+  }
+}
+
+export interface GetWorkoutErrorAction {
+  type: 'GET_WORKOUT_ERROR',
+  error: any
+}
+export function getWorkoutError(err: any): GetWorkoutErrorAction {
+  return {
+    type: 'GET_WORKOUT_ERROR',
     error: err
   }
 }
 
-export function addWorkoutRequest(): model.IWorkoutsAction {
+export interface AddWorkoutRequestAction {
+  type: 'ADD_WORKOUT_REQUEST'
+}
+export function addWorkoutRequest(): AddWorkoutRequestAction {
   return {
-    type: C.ADD_WORKOUT_REQUEST
+    type: 'ADD_WORKOUT_REQUEST'
   }
 }
 
-export function addWorkoutSuccess(): model.IWorkoutsAction {
+export interface AddWorkoutSuccessAction {
+  type: 'ADD_WORKOUT_SUCCESS'
+}
+export function addWorkoutSuccess(): AddWorkoutSuccessAction {
   return {
-    type: C.ADD_WORKOUT_SUCCESS
+    type: 'ADD_WORKOUT_SUCCESS'
   }
 }
 
-export function addWorkoutError(): model.IWorkoutsAction {
+export interface AddWorkoutErrorAction {
+  type: 'ADD_WORKOUT_ERROR'
+}
+export function addWorkoutError(): AddWorkoutErrorAction {
   return {
-    type: C.ADD_WORKOUT_ERROR
+    type: 'ADD_WORKOUT_ERROR'
   }
 }
 
-export function addSetRequest(): model.IWorkoutsAction {
+export interface AddSetRequestAction {
+  type: 'ADD_SET_REQUEST'
+}
+export function addSetRequest(): AddSetRequestAction {
   return {
-    type: C.ADD_SET_REQUEST
+    type: 'ADD_SET_REQUEST'
   }
 }
 
-export function addSetSuccess(): model.IWorkoutsAction {
+export interface AddSetSuccessAction {
+  type: 'ADD_SET_SUCCESS'
+}
+export function addSetSuccess(): AddSetSuccessAction {
   return {
-    type: C.ADD_SET_SUCCESS
+    type: 'ADD_SET_SUCCESS'
   }
 }
 
-export function addSetError(): model.IWorkoutsAction {
+export interface AddSetErrorAction {
+  type: 'ADD_SET_ERROR'
+}
+export function addSetError(): AddSetErrorAction {
   return {
-    type: C.ADD_SET_ERROR
+    type: 'ADD_SET_ERROR'
   }
 }
 
-export function getLiftsRequest(): model.IWorkoutsAction {
+export interface GetLiftsRequestAction {
+  type: 'GET_LIFTS_REQUEST'
+}
+export function getLiftsRequest(): GetLiftsRequestAction {
   return {
-    type: C.GET_LIFTS_REQUEST
+    type: 'GET_LIFTS_REQUEST'
   }
 }
 
-export function getLiftsSuccess(lifts): model.IWorkoutsAction {
+export interface GetLiftsSuccessAction {
+  type: 'GET_LIFTS_SUCCESS',
+  payload: {
+    lifts: model.ILift[]
+  }
+}
+export function getLiftsSuccess(lifts: model.ILift[]): GetLiftsSuccessAction {
   return {
-    type: C.GET_LIFTS_SUCCESS,
+    type: 'GET_LIFTS_SUCCESS',
     payload: {
       lifts
     }
   }
 }
 
-export function getLiftsError(error): model.IWorkoutsAction {
+export interface GetLiftsErrorAction {
+  type: 'GET_LIFTS_ERROR',
+  error: any
+}
+export function getLiftsError(error): GetLiftsErrorAction {
   return {
-    type: C.GET_LIFTS_ERROR,
+    type: 'GET_LIFTS_ERROR',
     error
   }
 }
 
+export interface ChangeLiftAction {
+  type: 'CHANGE_LIFT'
+}
 export function changeLift() {
   return {
-    type: C.CHANGE_LIFT
+    type: 'CHANGE_LIFT'
   }
 }
 
-export function changeLiftNameBeingTyped(setGroup, name) {
+export interface ChangeLiftNameBeingTypedAction {
+  type: 'CHANGE_LIFT_NAME_BEING_TYPED',
+  payload: {
+    setGroup: model.ISetGroup,
+    name: string
+  }
+}
+export function changeLiftNameBeingTyped(
+  setGroup: model.ISetGroup,
+  name: string
+): ChangeLiftNameBeingTypedAction {
   return {
-    type: C.CHANGE_LIFT_NAME_BEING_TYPED,
+    type: 'CHANGE_LIFT_NAME_BEING_TYPED',
     payload: {
       setGroup,
       name
@@ -147,9 +254,18 @@ export function changeLiftNameBeingTyped(setGroup, name) {
   }
 }
 
-export function addLiftRequest(setGroup, lift): model.IWorkoutsAction {
+export interface AddLiftRequestAction {
+  type: 'ADD_LIFT_REQUEST',
+  payload: {
+    setGroup: model.ISetGroup,
+    lift: model.ILift
+  }
+}
+export function addLiftRequest(
+  setGroup: model.ISetGroup, lift: model.ILift
+): AddLiftRequestAction {
   return {
-    type: C.ADD_LIFT_REQUEST,
+    type: 'ADD_LIFT_REQUEST',
     payload: {
       setGroup,
       lift
@@ -157,9 +273,18 @@ export function addLiftRequest(setGroup, lift): model.IWorkoutsAction {
   }
 }
 
-export function addLiftSuccess(id, setGroup): model.IWorkoutsAction {
+export interface AddLiftSuccessAction {
+  type: 'ADD_LIFT_SUCCESS',
+  payload: {
+    id: string,
+    setGroup: model.ISetGroup
+  }
+}
+export function addLiftSuccess(
+  id: string, setGroup: model.ISetGroup
+): AddLiftSuccessAction {
   return {
-    type: C.ADD_LIFT_SUCCESS,
+    type: 'ADD_LIFT_SUCCESS',
     payload: {
       id,
       setGroup
@@ -167,19 +292,30 @@ export function addLiftSuccess(id, setGroup): model.IWorkoutsAction {
   }
 }
 
-export function addLiftError(error): model.IWorkoutsAction {
+export interface AddLiftErrorAction {
+  type: 'ADD_LIFT_ERROR',
+  error: any
+}
+export function addLiftError(error): AddLiftErrorAction {
   return {
-    type: C.ADD_LIFT_ERROR,
+    type: 'ADD_LIFT_ERROR',
     error,
   }
 }
 
+export interface UpdateLiftSuggestionsAction {
+  type: 'UPDATE_LIFT_SUGGESTIONS',
+  payload: {
+    setGroup: model.ISetGroup,
+    typedValue: string
+  }
+}
 export function updateLiftSuggestions(
   setGroup: model.ISetGroup,
   typedValue: string
-): model.IWorkoutsAction {
+): UpdateLiftSuggestionsAction {
   return {
-    type: C.UPDATE_LIFT_SUGGESTIONS,
+    type: 'UPDATE_LIFT_SUGGESTIONS',
     payload: {
       setGroup,
       typedValue,
@@ -223,12 +359,7 @@ export function getSetGroups(workoutID: string): Redux.Dispatch {
     dispatch(getSetGroupsRequest(workoutID))
 
     hz('setGroups').findAll({workoutID}).watch().subscribe(setGroups => {
-      dispatch({
-        type: C.GET_SET_GROUPS_SUCCESS,
-        payload: {
-          setGroups
-        }
-      })
+      dispatch(getSetGroupsSuccess(setGroups))
     }, (err) => {
       console.error(err)
       dispatch({
@@ -246,12 +377,7 @@ export function getWorkouts(): Redux.Dispatch {
     })
 
     hz('workouts').watch().subscribe(workouts => {
-      dispatch({
-        type: C.GET_WORKOUTS_SUCCESS,
-        payload: {
-          workouts
-        }
-      })
+      dispatch(getWorkoutsSuccess(workouts))
       return workouts
     }, (err) => {
       dispatch({
@@ -299,3 +425,30 @@ export function addLift(setGroup: model.ISetGroup, lift: model.ILift) {
       })
   }
 }
+
+export type Action =
+  GetSetGroupsRequestAction
+  | GetSetGroupsSuccessAction
+  | GetSetGroupsErrorAction
+  | AddSetGroupRequestAction
+  | AddSetGroupSuccessAction
+  | AddSetGroupErrorAction
+  | GetWorkoutRequestAction
+  | GetWorkoutSuccessAction
+  | GetWorkoutsSuccessAction
+  | GetWorkoutErrorAction
+  | AddWorkoutRequestAction
+  | AddWorkoutSuccessAction
+  | AddWorkoutErrorAction
+  | AddSetRequestAction
+  | AddSetSuccessAction
+  | AddSetErrorAction
+  | GetLiftsRequestAction
+  | GetLiftsSuccessAction
+  | GetLiftsErrorAction
+  | ChangeLiftAction
+  | ChangeLiftNameBeingTypedAction
+  | AddLiftRequestAction
+  | AddLiftSuccessAction
+  | AddLiftErrorAction
+  | UpdateLiftSuggestionsAction
