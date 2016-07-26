@@ -1,4 +1,3 @@
-import * as firebase from '../../redux/modules/firebase/firebase'
 import * as workout from '../../redux/modules/workouts'
 import * as React from 'react'
 import * as R from 'ramda'
@@ -77,7 +76,6 @@ class Workout extends React.Component<IProps, {}> {
     }
     this.props.dispatch(workout.addSetGroup(setGroup))
   }
-
 
   getSetGroupsJSX() {
     if (this.props.setGroups === null) {
