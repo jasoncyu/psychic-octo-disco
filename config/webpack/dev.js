@@ -4,6 +4,7 @@ var postcssAssets = require('postcss-assets');
 var postcssNext = require('postcss-cssnext');
 var stylelint = require('stylelint');
 var ManifestPlugin = require('webpack-manifest-plugin');
+var postcssModulesValues = require('postcss-modules-values');
 
 var config = {
   devtool: 'eval',
@@ -93,7 +94,8 @@ var config = {
     return [
       stylelint({ files: '../../src/app/*.css' }),
       postcssNext(),
-      postcssAssets({ relative: true })
+      postcssAssets({ relative: true }),
+      postcssModulesValues
     ];
   },
 

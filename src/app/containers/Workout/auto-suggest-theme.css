@@ -1,11 +1,13 @@
+@value box-width: 280px;
+
 .container {
   position: relative;
-  width: 280px;
+  width: box-width;
   margin: auto;
 }
 
 .input {
-  width: 240px;
+  width: box-width;
   height: 30px;
   padding: 10px 20px;
   font-family: Helvetica, sans-serif;
@@ -22,7 +24,7 @@
 .suggestionsContainer {
   position: absolute;
   top: 30px;
-  width: 280px;
+  width: box-width;
   margin: 0;
   padding: 0;
   list-style-type: none;

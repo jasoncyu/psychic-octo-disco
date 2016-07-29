@@ -5,6 +5,7 @@ var postcssNext = require('postcss-cssnext');
 var stylelint = require('stylelint');
 var ManifestPlugin = require('webpack-manifest-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var postcssModulesValues = require('postcss-modules-values');
 
 var config = {
   bail: true,
@@ -100,7 +101,8 @@ var config = {
     return [
       stylelint({ files: '../../src/app/*.css' }),
       postcssNext(),
-      postcssAssets({ relative: true })
+      postcssAssets({ relative: true }),
+      postcssModulesValues
     ];
   },
 
