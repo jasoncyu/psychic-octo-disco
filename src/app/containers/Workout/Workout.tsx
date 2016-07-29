@@ -1,6 +1,7 @@
 import * as workout from '../../redux/modules/workouts'
 import * as React from 'react'
 import * as R from 'ramda'
+const s = require('./style.css')
 
 // Need to use require() because 'react-autosuggest' isn't known at compile-time
 // import * as Autosuggest from 'react-autosuggest';
@@ -95,6 +96,7 @@ class Workout extends React.Component<IProps, {}> {
         <div>
           {setGroup.id}
           <Autosuggest
+            theme={s}
             suggestions={setGroup.liftSuggestions}
             getSuggestionValue={getSuggestionValue}
             renderSuggestion={renderLiftSuggestion}
