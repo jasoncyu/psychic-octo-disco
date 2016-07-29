@@ -339,8 +339,9 @@ export function getLifts() {
   }
 }
 
-export function addSetGroup(setGroup) {
+export function addSetGroup(workoutID: string, percentUp: number) {
   return dispatch => {
+    const setGroup = model.createSetGroup(workoutID, percentUp)
     dispatch(addSetGroupRequest(setGroup))
 
     hz('setGroups').store(setGroup)

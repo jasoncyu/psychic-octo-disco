@@ -78,7 +78,7 @@ class Workouts extends React.Component<IProps, {}> {
         <ul>
           {this.props.workouts.map(workout => {
              return (
-               <li>
+               <li key={workout.id}>
                  <router.Link to={`/workouts/${workout.id}`}>
                    {workout.id}
                  </router.Link>

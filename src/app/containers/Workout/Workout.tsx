@@ -26,7 +26,6 @@ interface IProps {
   params: any
 }
 
-
 const renderLiftSuggestion = (suggestion: workout.ILift) => {
   return <span>{suggestion.name}</span>
 }
@@ -70,11 +69,8 @@ class Workout extends React.Component<IProps, {}> {
   }
 
   addSetGroup() {
-    const setGroup: workout.ISetGroup = {
-      workoutID: this.props.params.id,
-      percentUp: 10,
-    }
-    this.props.dispatch(workout.addSetGroup(setGroup))
+    const workoutID = this.props.params.id
+    this.props.dispatch(workout.addSetGroup(workoutID, 10))
   }
 
   getSetGroupsJSX() {
@@ -89,7 +85,8 @@ class Workout extends React.Component<IProps, {}> {
       const inputProps = {
         value: setGroup.liftNameBeingTyped,
         onChange: (event, {newValue}) => {
-          this.props.dispatch(workout.changeLiftNameBeingTyped(setGroup, newValue))
+          this.props.dispatch(
+            workout.changeLiftNameBeingTyped(setGroup, newValue))
         },
         type: 'search',
         placeholder: 'Enter lift name'
@@ -108,18 +105,18 @@ class Workout extends React.Component<IProps, {}> {
             type="text"
             onChange={(evt) => {
               const target = evt.target as any
-              this.props.dispatch(workout.changeLiftNameBeingTyped(setGroup, target.value))
+              this.props.dispatch(
+                workout.changeLiftNameBeingTyped(setGroup, target.value))
             }}
           />
 
           <button
-            onClick={() =>{
+            onClick={() => {
               this.props.addLift(setGroup)
             }}
           >
             Add Lift
           </button>
-
         </div>
       )
     })

@@ -86,6 +86,19 @@ export interface ISetGroup {
   liftSuggestions?: ILift[];
 }
 
+export function createSetGroup(
+  workoutID: string, percentUp: number
+): ISetGroup {
+  return {
+    workoutID: workoutID,
+    setIDs: [],
+    percentUp: percentUp,
+    liftNameBeingTyped: '',
+    liftSuggestions: []
+  }
+}
+
+
 export interface ISetGroups {
   [id: string]: ISetGroup;
 }
